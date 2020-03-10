@@ -217,3 +217,9 @@ class PolynomialTest(unittest.TestCase):
         self.assertEqual(
             '2x+1',
             str(Polynomial([2, 1])))
+
+
+    def test_str_8(self):
+        self.assertEqual(
+            '2x',
+            str(Polynomial([2, 0])))
