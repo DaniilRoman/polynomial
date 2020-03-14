@@ -5,6 +5,11 @@ class Polynomial:
     def __init__(self, obj):
         if isinstance(obj, (list, tuple)) and len(obj) == 0:
             raise AttributeError()
+        if isinstance(obj, (list, tuple)):
+            if all(elem == 0 for elem in obj):
+                obj = [0]
+            elif not all(isinstance(elem, int) for elem in obj):
+                raise TypeError()
         if isinstance(obj, list):
             self.coeffs = obj
         elif isinstance(obj, tuple):
@@ -53,16 +58,16 @@ class Polynomial:
 
         def to_str(x, zero_index=False):
             if x > 1:
-                return "+" + str(x)
+                return " + " + str(x)
             elif x == 1:
                 if zero_index:
-                    return "+1"
+                    return " + 1"
                 else:
                     return ""
             elif x == -1:
-                return "-"
+                return " - "
             else:
-                return str(x)
+                return " - " + str(abs(x))
 
         args = self.coeffs[-1::-1]
         for i in range(len(self.coeffs), 0, -1):
@@ -80,8 +85,12 @@ class Polynomial:
                 str_format.append(str_part)
 
         result = "".join(str_format)
-        if len(result) != 0 and result[0] == "+":
-            result = result[1:]
+        if len(result) != 0 and result[0:3] == " + ":
+            result = result[3:]
+        if len(result) != 0 and result[0:3] == " - ":
+            result = result[1] + result[3:]
+        elif len(result) == 0:
+            result = "0"
         return result
 
     def _add(self, o):
@@ -103,18 +112,19 @@ class Polynomial:
             return self._validate(Polynomial([x * o for x in self.coeffs]))
         elif isinstance(o, Polynomial):
             _len = len(self.coeffs)
-            return self._validate(reduce(lambda x, y: x + y,
-                          map(
-                              lambda i: Polynomial((o * self.coeffs[i]).coeffs + [0 for j in range(_len-i-1)]),
-                              range(_len)
-                          )))
+            return self._validate(
+                reduce(lambda x, y: x + y,
+                       map(
+                           lambda i: Polynomial((o * self.coeffs[i]).coeffs + [0 for j in range(_len - i - 1)]),
+                           range(_len)
+                       )))
         else:
             raise TypeError
 
     def _validate(self, p):
         i = 0
         while p.coeffs[i] == 0:
-            if i == len(p.coeffs)-1:
+            if i == len(p.coeffs) - 1:
                 break
             i += 1
 

@@ -1,5 +1,5 @@
 import unittest
-from Polynomial.polynomial import Polynomial
+from polynomial import Polynomial
 
 
 class PolynomialTest(unittest.TestCase):
@@ -38,6 +38,20 @@ class PolynomialTest(unittest.TestCase):
     def test_init_5(self):
         with self.assertRaises(AttributeError):
             Polynomial([])
+
+    def test_init_6(self):
+        self.assertEqual(
+            [0],
+            Polynomial((0, 0, 0)).coeffs)
+
+    def test_init_7(self):
+        self.assertEqual(
+            [0],
+            Polynomial([0, 0, 0]).coeffs)
+
+    def test_init_8(self):
+        with self.assertRaises(TypeError):
+            Polynomial([3.4, 4.23])
 
     ######                 ######
     ##        __add__()        ##
@@ -190,27 +204,27 @@ class PolynomialTest(unittest.TestCase):
 
     def test_str_1(self):
         self.assertEqual(
-            'x^2+2x-3',
+            'x^2 + 2x - 3',
             str(Polynomial([1, 2, -3])))
 
     def test_str_2(self):
         self.assertEqual(
-            '-x^2+3',
+            '-x^2 + 3',
             str(Polynomial([-1, 0, 3])))
 
     def test_str_3(self):
         self.assertEqual(
-            '',
-            str(Polynomial([0, 0, 0])))
+            '0',
+            str(Polynomial([0])))
 
     def test_str_4(self):
         self.assertEqual(
-            'x^2+32x+423',
+            'x^2 + 32x + 423',
             str(Polynomial([1, 32, 423])))
 
     def test_str_5(self):
         self.assertEqual(
-            '-3x^4-3x^3-3x^2-3x-3',
+            '-3x^4 - 3x^3 - 3x^2 - 3x - 3',
             str(Polynomial([-3, -3, -3, -3, -3])))
 
     def test_str_6(self):
@@ -220,7 +234,7 @@ class PolynomialTest(unittest.TestCase):
 
     def test_str_7(self):
         self.assertEqual(
-            '2x+1',
+            '2x + 1',
             str(Polynomial([2, 1])))
 
 
@@ -228,3 +242,15 @@ class PolynomialTest(unittest.TestCase):
         self.assertEqual(
             '2x',
             str(Polynomial([2, 0])))
+
+
+    def test_str_9(self):
+        self.assertEqual('-x^3 - 2x', str(Polynomial([-1, 0, -2, 0])))
+
+    ######                 ######
+    ##     some extra tests    ##
+    ######                 ######
+
+
+if __name__ == '__main__':
+    unittest.main()
