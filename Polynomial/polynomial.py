@@ -21,39 +21,26 @@ class Polynomial:
             raise TypeError
 
     def __add__(self, o):
-        return self.__add(o)
+        return self._add(o)
 
     def __radd__(self, o):
-        return self.__add(o)
+        return self._add(o)
 
     def __sub__(self, o):
-        return self.__add(-o)
+        return self._add(-o)
 
     def __rsub__(self, o):
-        return (-self).__add(o)
+        return (-self)._add(o)
 
     def __neg__(self):
         self.coeffs = [-i for i in self.coeffs]
         return self
 
     def __mul__(self, o):
-        return self.__mul(o)
+        return self._mul(o)
 
     def __rmul__(self, o):
-        return self.__mul(o)
-
-    def __mul(self, o):
-        if isinstance(o, int):
-            return Polynomial([x * o for x in self.coeffs])
-        elif isinstance(o, Polynomial):
-            _len = len(self.coeffs)
-            return reduce(lambda x, y: x + y,
-                          map(
-                              lambda i: Polynomial((o * self.coeffs[i]).coeffs + [0 for j in range(_len-i-1)]),
-                              range(_len)
-                          ))
-        else:
-            raise TypeError
+        return self._mul(o)
 
     def __repr__(self):
         return "Polynomial(" + str(self.coeffs) + ")"
@@ -97,7 +84,7 @@ class Polynomial:
             result = result[1:]
         return result
 
-    def __add(self, o):
+    def _add(self, o):
         if isinstance(o, int):
             self.coeffs[-1] = self.coeffs[-1] + o
         elif isinstance(o, Polynomial):
@@ -109,4 +96,26 @@ class Polynomial:
             self.coeffs = long
         else:
             raise TypeError()
-        return self
+        return self._validate(self)
+
+    def _mul(self, o):
+        if isinstance(o, int):
+            return self._validate(Polynomial([x * o for x in self.coeffs]))
+        elif isinstance(o, Polynomial):
+            _len = len(self.coeffs)
+            return self._validate(reduce(lambda x, y: x + y,
+                          map(
+                              lambda i: Polynomial((o * self.coeffs[i]).coeffs + [0 for j in range(_len-i-1)]),
+                              range(_len)
+                          )))
+        else:
+            raise TypeError
+
+    def _validate(self, p):
+        i = 0
+        while p.coeffs[i] == 0:
+            if i == len(p.coeffs)-1:
+                break
+            i += 1
+
+        return Polynomial(p.coeffs[i:])

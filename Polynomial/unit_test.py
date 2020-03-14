@@ -112,7 +112,7 @@ class PolynomialTest(unittest.TestCase):
 
     def test_sub_7(self):
         self.assertEqual(
-            Polynomial([0, 0, 0]),
+            Polynomial([0]),
             Polynomial([4, 3, 2]) - Polynomial([4, 3, 2]))
 
     def test_sub_8(self):
@@ -160,6 +160,11 @@ class PolynomialTest(unittest.TestCase):
         self.assertEqual(
             Polynomial([8, 2, -39, 30]),
             Polynomial([4, -5]) * Polynomial([2, 3, -6]))
+
+    def test_mul_7(self):
+        self.assertEqual(
+            Polynomial([0]),
+            Polynomial([4, -5]) * 0)
 
     ######                 ######
     ##    complex operation    ##
