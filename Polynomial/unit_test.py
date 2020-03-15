@@ -147,6 +147,13 @@ class PolynomialTest(unittest.TestCase):
             Polynomial([1, 0, -4]),
             -Polynomial([-1, 0, 4]))
 
+    def test_neg_2(self):
+        p = Polynomial([1, 0, -4])
+        p.coeffs = [0, 1, 0, -4]
+        self.assertEqual(
+            p,
+            -Polynomial([-1, 0, 4]))
+
     ######                 ######
     ##       __mul__()        ##
     ######                 ######
@@ -206,11 +213,17 @@ class PolynomialTest(unittest.TestCase):
             'Polynomial([-1, 0, 4])',
             repr(Polynomial([-1, 0, 4])))
 
-
     def test_repr_2(self):
         self.assertEqual(
             'Polynomial([-1, 0, 4])',
             repr(Polynomial([0, 0, -1, 0, 4])))
+
+    def test_repr_3(self):
+        p = Polynomial([-1, 0, 4])
+        p.coeffs = [0, 0, -1, 0, 4]
+        self.assertEqual(
+            'Polynomial([-1, 0, 4])',
+            repr(p))
 
     ######                 ######
     ##        __str__()        ##
@@ -251,21 +264,33 @@ class PolynomialTest(unittest.TestCase):
             '2x + 1',
             str(Polynomial([2, 1])))
 
-
     def test_str_8(self):
         self.assertEqual(
             '2x',
             str(Polynomial([2, 0])))
 
-
     def test_str_9(self):
         self.assertEqual('-x^3 - 2x', str(Polynomial([0, -1, 0, -2, 0])))
 
+    def test_str_10(self):
+        p = Polynomial([-1, 0, -2, 0])
+        p.coeffs = [0, -1, 0, -2, 0]
+        self.assertEqual('-x^3 - 2x', str(p))
 
     ######                 ######
-    ##     some extra tests    ##
+    ##        __eq__()        ##
     ######                 ######
 
+    def test_eq_1(self):
+        with self.assertRaises(TypeError):
+            Polynomial([-2]) == 2
+
+    def test_eq_2(self):
+        p = Polynomial([12, 0])
+        p.coeffs = [0, 12, 0]
+        self.assertEqual(
+            p,
+            Polynomial([0, 12, 0]))
 
 if __name__ == '__main__':
     unittest.main()

@@ -22,6 +22,8 @@ class Polynomial:
 
     def __eq__(self, o):
         if isinstance(o, Polynomial):
+            self.coeffs = self._validate(self.coeffs)
+            o.coeffs = self._validate(o.coeffs)
             return self.coeffs == o.coeffs
         else:
             raise TypeError
@@ -39,6 +41,7 @@ class Polynomial:
         return (-self)._add(o)
 
     def __neg__(self):
+        self.coeffs = self._validate(self.coeffs)
         self.coeffs = [-i for i in self.coeffs]
         return self
 
@@ -49,11 +52,14 @@ class Polynomial:
         return self._mul(o)
 
     def __repr__(self):
+        self.coeffs = self._validate(self.coeffs)
         return "Polynomial(" + str(self.coeffs) + ")"
 
     def __str__(self):
         if len(self.coeffs) == 1:
             return str(self.coeffs[0])
+
+        self.coeffs = self._validate(self.coeffs)
 
         str_format = []
 
