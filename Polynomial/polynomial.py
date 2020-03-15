@@ -10,6 +10,7 @@ class Polynomial:
                 obj = [0]
             elif not all(isinstance(elem, int) for elem in obj):
                 raise TypeError()
+            obj = self._validate(obj)
         if isinstance(obj, list):
             self.coeffs = obj
         elif isinstance(obj, tuple):
@@ -94,7 +95,9 @@ class Polynomial:
         return result
 
     def _add(self, o):
-        if isinstance(o, int):
+        if isinstance(o, bool):
+            raise TypeError
+        elif isinstance(o, int):
             self.coeffs[-1] = self.coeffs[-1] + o
         elif isinstance(o, Polynomial):
             (min_len, short, long) = (len(self.coeffs), self.coeffs, o.coeffs) \
@@ -108,7 +111,9 @@ class Polynomial:
         return self._validate(self)
 
     def _mul(self, o):
-        if isinstance(o, int):
+        if isinstance(o, bool):
+            raise TypeError
+        elif isinstance(o, int):
             return self._validate(Polynomial([x * o for x in self.coeffs]))
         elif isinstance(o, Polynomial):
             _len = len(self.coeffs)
@@ -122,10 +127,19 @@ class Polynomial:
             raise TypeError
 
     def _validate(self, p):
-        i = 0
-        while p.coeffs[i] == 0:
-            if i == len(p.coeffs) - 1:
-                break
-            i += 1
+        if isinstance(p, Polynomial):
+            i = 0
+            while p.coeffs[i] == 0:
+                if i == len(p.coeffs) - 1:
+                    break
+                i += 1
 
-        return Polynomial(p.coeffs[i:])
+            return Polynomial(p.coeffs[i:])
+        else:
+            i = 0
+            while p[i] == 0:
+                if i == len(p) - 1:
+                    break
+                i += 1
+
+            return p[i:]

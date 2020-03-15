@@ -1,7 +1,13 @@
 import unittest
 import os
+from statistics import mean
 
-from StockMarket.stock_market import Investor, SolverStrategy, Item, Parser, ResultWriter
+from stock_market import Investor, SolverStrategy, Item, Parser, ResultWriter
+from stock_market_optim import calculate
+
+import time
+
+from StockMarket.stock_market import calculate_wrapper
 
 
 class StockMarketTest(unittest.TestCase):
@@ -26,10 +32,43 @@ class StockMarketTest(unittest.TestCase):
     def test_with_writing_result(self):
         investor, items = Parser.parse(os.path.join('test_files', 'first_test.txt'))
         solver = SolverStrategy(investor, items)
+        ResultWriter.write(solver)
 
-        actual = ResultWriter.get_result_str(solver)
-        expected = Parser.get_text(os.path.join('result_files', 'test_result.txt'))
+        actual = Parser.get_text(os.path.join('result_files', 'test_result_actual.txt'))
+        expected = Parser.get_text(os.path.join('result_files', 'test_result_expected.txt'))
 
         self.assertEqual(
             expected,
             actual)
+
+    def test_with_writing_result_optimal(self):
+        calculate(os.path.join('test_files', 'first_test.txt'))
+        expected = Parser.get_text(os.path.join('result_files', 'test_result_expected.txt'))
+        actual = Parser.get_text(os.path.join('result_files', 'test_result_actual.txt'))
+
+        self.assertEqual(
+            expected,
+            actual)
+
+    def test_performance_once_run(self):
+        file_path = os.path.join('test_files', 'first_test.txt')
+        n = 1000
+        time_1 = []
+        time_2 = []
+
+        for i in range(n):
+            start_time = time.time()
+            calculate_wrapper(file_path)
+            time_1.append(time.time() - start_time)
+            # print("--- %s seconds ---" % (time.time() - start_time))
+
+        for i in range(n):
+            start_time = time.time()
+            calculate(file_path)
+            time_2.append(time.time() - start_time)
+
+        print("--- %s seconds ---" % mean(time_1))
+        print("--- %s seconds ---" % mean(time_2))
+
+if __name__ == '__main__':
+    unittest.main()

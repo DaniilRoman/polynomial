@@ -91,6 +91,10 @@ class PolynomialTest(unittest.TestCase):
             Polynomial([3, 3, 6, 2]),
             Polynomial([4, 3, 2, 1]) + Polynomial([-1, 0, 4, 1]))
 
+    def test_add_8(self):
+        with self.assertRaises(TypeError):
+            Polynomial([4, 3, 2, 1]) + True
+
     ######                 ######
     ##        __sub__()        ##
     ######                 ######
@@ -180,6 +184,10 @@ class PolynomialTest(unittest.TestCase):
             Polynomial([0]),
             Polynomial([4, -5]) * 0)
 
+    def test_mul_8(self):
+        with self.assertRaises(TypeError):
+            Polynomial([4, 3, 2, 1]) * True
+
     ######                 ######
     ##    complex operation    ##
     ######                 ######
@@ -197,6 +205,12 @@ class PolynomialTest(unittest.TestCase):
         self.assertEqual(
             'Polynomial([-1, 0, 4])',
             repr(Polynomial([-1, 0, 4])))
+
+
+    def test_repr_2(self):
+        self.assertEqual(
+            'Polynomial([-1, 0, 4])',
+            repr(Polynomial([0, 0, -1, 0, 4])))
 
     ######                 ######
     ##        __str__()        ##
@@ -245,7 +259,8 @@ class PolynomialTest(unittest.TestCase):
 
 
     def test_str_9(self):
-        self.assertEqual('-x^3 - 2x', str(Polynomial([-1, 0, -2, 0])))
+        self.assertEqual('-x^3 - 2x', str(Polynomial([0, -1, 0, -2, 0])))
+
 
     ######                 ######
     ##     some extra tests    ##

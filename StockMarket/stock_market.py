@@ -1,19 +1,3 @@
-# 1 item       = 1000 $
-# 1 day off    = 1 $
-# after period = 1000 $
-
-# item:
-#      - name
-#      - price [% by 1000 $]
-
-# N - days
-# name; price; count - is known
-
-# from 0 to M items every days
-# S - money count
-
-# can buy only whole pack
-
 import os
 
 
@@ -96,7 +80,7 @@ class ResultWriter:
     def write(solver):
         result_str = ResultWriter.get_result_str(solver)
 
-        with open(os.path.join('result_files', 'test_result.txt'), 'w') as file:
+        with open(os.path.join('result_files', 'test_result_actual.txt'), 'w') as file:
             file.write(result_str)
 
     @staticmethod
@@ -108,3 +92,8 @@ class ResultWriter:
                                  for i in investor.items])
         result_str += '\n'
         return result_str
+
+def calculate_wrapper(file_path):
+    investor, items = Parser.parse(file_path)
+    solver = SolverStrategy(investor, items)
+    ResultWriter.write(solver)
