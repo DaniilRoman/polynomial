@@ -1,5 +1,7 @@
 import os
 
+def get_actual_result_path():
+    return os.path.join('StockMarket', 'result_files', 'test_result_actual.txt')
 
 class Item:
     def __init__(self, day, name, price, count):
@@ -130,7 +132,7 @@ class ResultWriter:
     def write(solver):
         result_str = ResultWriter.get_result_str(solver)
 
-        with open(os.path.join('result_files', 'test_result_actual.txt'), 'w') as file:
+        with open(get_actual_result_path(), 'w') as file:
             file.write(result_str)
 
     @staticmethod

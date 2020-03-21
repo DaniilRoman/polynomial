@@ -3,11 +3,16 @@ import os
 from statistics import mean
 
 from stock_market import Investor, SolverStrategy, Item, Parser, \
-    ResultWriter, calculate_wrapper, GreedyAlgorithm, DynamicProgramingAlgorithm
+    ResultWriter, calculate_wrapper, GreedyAlgorithm, DynamicProgramingAlgorithm, get_actual_result_path
 from stock_market_optim import calculate_greedy, calculate_dynamic_programing
 
 import time
 
+def get_test_res_path():
+    return os.path.abspath('StockMarket/test_files/first_test.txt')
+
+def get_expected_result_path():
+    return os.path.join('StockMarket', 'result_files', 'test_result_expected.txt')
 
 class StockMarketTest(unittest.TestCase):
 
@@ -21,7 +26,7 @@ class StockMarketTest(unittest.TestCase):
             solver.calculate())
 
     def test_with_parsing(self):
-        investor, items = Parser.parse(os.path.join('test_files', 'first_test.txt'))
+        investor, items = Parser.parse(get_test_res_path())
         solver = SolverStrategy(GreedyAlgorithm(investor, items))
 
         self.assertEqual(
@@ -35,12 +40,12 @@ class StockMarketTest(unittest.TestCase):
         self._run_with_writing_result(DynamicProgramingAlgorithm)
 
     def _run_with_writing_result(self, alg):
-        investor, items = Parser.parse(os.path.join('test_files', 'first_test.txt'))
+        investor, items = Parser.parse(get_test_res_path())
         solver = SolverStrategy(alg(investor, items))
         ResultWriter.write(solver)
 
-        actual = Parser.get_text(os.path.join('result_files', 'test_result_actual.txt'))
-        expected = Parser.get_text(os.path.join('result_files', 'test_result_expected.txt'))
+        actual = Parser.get_text(get_actual_result_path())
+        expected = Parser.get_text(get_expected_result_path())
 
         self.assertEqual(
             expected,
@@ -53,9 +58,9 @@ class StockMarketTest(unittest.TestCase):
         self._with_writing_result_optimal(calculate_dynamic_programing)
 
     def _with_writing_result_optimal(self, alg):
-        alg(os.path.join('test_files', 'first_test.txt'))
-        expected = Parser.get_text(os.path.join('result_files', 'test_result_expected.txt'))
-        actual = Parser.get_text(os.path.join('result_files', 'test_result_actual.txt'))
+        alg(get_test_res_path())
+        expected = Parser.get_text(get_expected_result_path())
+        actual = Parser.get_text(get_actual_result_path())
 
         self.assertEqual(
             expected,
@@ -68,7 +73,7 @@ class StockMarketTest(unittest.TestCase):
         self._run_comparison(DynamicProgramingAlgorithm, calculate_dynamic_programing)
 
     def _run_comparison(self, alg1, alg2, n=10):
-        file_path = os.path.join('test_files', 'first_test.txt')
+        file_path = get_test_res_path()
         time_1 = []
         time_2 = []
 
