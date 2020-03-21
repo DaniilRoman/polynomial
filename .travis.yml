@@ -7,3 +7,5 @@ install:
 script:
   - python Polynomial/unit_test.py
   - python StockMarket/unit_test.py
+after_success:
+  - codecov
