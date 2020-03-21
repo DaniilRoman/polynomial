@@ -46,18 +46,14 @@ class StockMarketTest(unittest.TestCase):
             expected,
             actual)
 
-    def test_with_writing_result_optimal(self):
-        calculate_greedy(os.path.join('test_files', 'first_test.txt'))
-        expected = Parser.get_text(os.path.join('result_files', 'test_result_expected.txt'))
-        actual = Parser.get_text(os.path.join('result_files', 'test_result_actual.txt'))
-
-        self.assertEqual(
-            expected,
-            actual)
-
+    def test_with_writing_result_optimal_greedy(self):
+        self._with_writing_result_optimal(calculate_greedy)
 
     def test_with_writing_result_optimal_dp(self):
-        calculate_dynamic_programing(os.path.join('test_files', 'first_test.txt'))
+        self._with_writing_result_optimal(calculate_dynamic_programing)
+
+    def _with_writing_result_optimal(self, alg):
+        alg(os.path.join('test_files', 'first_test.txt'))
         expected = Parser.get_text(os.path.join('result_files', 'test_result_expected.txt'))
         actual = Parser.get_text(os.path.join('result_files', 'test_result_actual.txt'))
 
@@ -66,45 +62,30 @@ class StockMarketTest(unittest.TestCase):
             actual)
 
     def test_performance_once_run(self):
-        file_path = os.path.join('test_files', 'first_test.txt')
-        n = 1000
-        time_1 = []
-        time_2 = []
-
-        for i in range(n):
-            start_time = time.time()
-            calculate_wrapper(file_path, GreedyAlgorithm)
-            time_1.append(time.time() - start_time)
-            # print("--- %s seconds ---" % (time.time() - start_time))
-
-        for i in range(n):
-            start_time = time.time()
-            calculate_greedy(file_path)
-            time_2.append(time.time() - start_time)
-
-        print("--- %s seconds ---" % mean(time_1))
-        print("--- %s seconds ---" % mean(time_2))
+        self._run_comparison(GreedyAlgorithm, calculate_greedy)
 
     def test_performance_once_run_dp(self):
+        self._run_comparison(DynamicProgramingAlgorithm, calculate_dynamic_programing)
+
+    def _run_comparison(self, alg1, alg2, n=10):
         file_path = os.path.join('test_files', 'first_test.txt')
-        n = 10
         time_1 = []
         time_2 = []
 
         for i in range(n):
             start_time = time.time()
-            calculate_wrapper(file_path, DynamicProgramingAlgorithm)
+            calculate_wrapper(file_path, alg1)
             time_1.append(time.time() - start_time)
-            # print("--- %s seconds ---" % (time.time() - start_time))
 
         for i in range(n):
             start_time = time.time()
-            calculate_dynamic_programing(file_path)
+            alg2(file_path)
             time_2.append(time.time() - start_time)
 
+        print("--- Clear ---")
         print("--- %s seconds ---" % mean(time_1))
+        print("--- Optimal ---")
         print("--- %s seconds ---" % mean(time_2))
-
 
 if __name__ == '__main__':
     unittest.main()

@@ -115,7 +115,7 @@ class Parser:
             items = []
             for line in fp:
                 day, name, price, count = line.split()
-                items.append(Item(int(n_days) - int(day), str(name), float(price), int(count)))
+                items.append(Item(int(n_days) - int(day), str(name), int(price), int(count)))
             return investor, items
 
     @staticmethod
