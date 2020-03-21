@@ -49,6 +49,7 @@ class GreedyAlgorithm:
                     max_item = item
             self.investor.add_item(max_item)
             self.items.remove(max_item)
+        self.investor.items = self.investor.items[-1::-1]
 
 
 class DynamicProgramingAlgorithm:
@@ -92,7 +93,7 @@ class DynamicProgramingAlgorithm:
         find_ans(count_papers, investor_money)
 
         self.investor.total_reward = _best_reword_matrix[count_papers][investor_money]
-        for i in _answer_indexes[-1::-1]:
+        for i in _answer_indexes:
             self.investor.items.append(self.items[i - 1])
 
 
@@ -143,7 +144,7 @@ class ResultWriter:
         return result_str
 
 
-def calculate_wrapper(file_path):
+def calculate_wrapper(file_path, alg):
     investor, items = Parser.parse(file_path)
-    solver = SolverStrategy(GreedyAlgorithm(investor, items))
+    solver = SolverStrategy(alg(investor, items))
     ResultWriter.write(solver)
