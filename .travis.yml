@@ -5,7 +5,7 @@ cache: pip
 install:
   - pip install -r requirements.txt
 script:
-  - python Polynomial/unit_test.py
-  - python StockMarket/unit_test.py
+  - coverage run Polynomial/unit_test.py
+  - coverage run StockMarket/unit_test.py
 after_success:
   - codecov
