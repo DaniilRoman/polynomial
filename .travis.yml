@@ -6,6 +6,5 @@ install:
   - pip install -r requirements.txt
 script:
   - coverage run Polynomial/unit_test.py
-  - coverage run StockMarket/unit_test.py
 after_success:
   - codecov
