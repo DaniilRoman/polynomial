@@ -22,8 +22,11 @@ python main.py -a dynamic_optimal -i test_files\random_data.txt -o result_files\
 * dynamic_optimal - <b>2 секунды</b>
 * greedy - <b>4 милисекунды</b>
 
+И следующее использование памяти:
+* dynamic - <b>595 064 KB</b>
+* dynamic_optimal - <b>515 152  KB</b>
+* greedy - <b>96 188 KB</b>
+
 На точных алгоритмах результат: <b>160 153</b>
 
 На жадном алгоритме: <b>140 217</b>
-
-`Код по замеру памяти не запускал по причине, что писал на Ubuntu`

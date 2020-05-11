@@ -1,4 +1,5 @@
 import time
+import resource
 
 from algorithms import GreedyAlgorithm, DynamicProgramingAlgorithm
 
@@ -31,6 +32,7 @@ if __name__ == "__main__":
     duration = time.time() - start_time
 
     print('Duration is {:.2f} ms'.format(duration * 1000))
+    print('Memory usage: {} KB'.format(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss))
 
     ResultWriter.write(investor, output_file)
 
